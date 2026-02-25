@@ -45,39 +45,35 @@ public class DogService {
     }
 
     @Transactional
-    public void updateDog(Long dogId,
-                          String name,
-                          String breed,
-                          String ownerPhone) {
+    public void updateDog(Long dogId, Dog updatedDog) {
 
         Dog dog = dogRepository.findById(dogId)
                 .orElseThrow(() ->
                         new IllegalStateException("Dog with id " + dogId + " does not exist"));
 
-        if (name != null &&
-                name.length() > 0 &&
-                !Objects.equals(dog.getName(), name)) {
-            dog.setName(name);
+        if (updatedDog.getName() != null) {
+            dog.setName(updatedDog.getName());
         }
 
-        if (breed != null &&
-                breed.length() > 0 &&
-                !Objects.equals(dog.getBreed(), breed)) {
-            dog.setBreed(breed);
+        if (updatedDog.getBreed() != null) {
+            dog.setBreed(updatedDog.getBreed());
         }
 
-        if (ownerPhone != null &&
-                ownerPhone.length() > 0 &&
-                !Objects.equals(dog.getOwnerPhone(), ownerPhone)) {
+        if (updatedDog.getOwnerPhone() != null) {
 
-            Optional<Dog> dogOptional = dogRepository
-                    .findDogByOwnerPhone(ownerPhone);
+            Optional<Dog> dogOptional =
+                    dogRepository.findDogByOwnerPhone(updatedDog.getOwnerPhone());
 
-            if (dogOptional.isPresent()) {
-                throw new IllegalStateException("Owner phone number already registered");
+            if (dogOptional.isPresent() &&
+                    !dogOptional.get().getId().equals(dogId)) {
+                throw new IllegalStateException("Owner phone already registered");
             }
 
-            dog.setOwnerPhone(ownerPhone);
+            dog.setOwnerPhone(updatedDog.getOwnerPhone());
+        }
+
+        if (updatedDog.getBirthDate() != null) {
+            dog.setBirthDate(updatedDog.getBirthDate());
         }
     }
 }

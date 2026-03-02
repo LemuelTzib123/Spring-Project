@@ -16,10 +16,15 @@ public class DogController {
         this.dogService = dogService;
     }
 
-
     @GetMapping
     public List<Dog> getDogs() {
         return dogService.getDogs();
+    }
+
+    @GetMapping(path = "{dogId}")
+    public Dog getDogById(
+            @PathVariable("dogId") Long dogId) {
+        return dogService.getDogById(dogId);
     }
 
     @PostMapping
@@ -27,13 +32,11 @@ public class DogController {
         dogService.addNewDog(dog);
     }
 
-
     @DeleteMapping(path = "{dogId}")
     public void deleteDog(
             @PathVariable("dogId") Long dogId) {
         dogService.deleteDog(dogId);
     }
-
 
     @PutMapping(path = "{dogId}")
     public void updateDog(
@@ -41,4 +44,5 @@ public class DogController {
             @RequestBody Dog updatedDog) {
 
         dogService.updateDog(dogId, updatedDog);
-    } }
+    }
+}

@@ -75,5 +75,13 @@ public class DogService {
         if (updatedDog.getBirthDate() != null) {
             dog.setBirthDate(updatedDog.getBirthDate());
         }
+
+    }
+    public Dog getDogById(Long dogId) {
+        return dogRepository.findById(dogId)
+                .orElseThrow(() ->
+                        new IllegalStateException(
+                                "Dog with id " + dogId + " does not exist"));
     }
 }
+
